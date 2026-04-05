@@ -18,11 +18,16 @@ export const useOrder = () => {
       setOrder([...order, newItem])
     }
   }
-  console.log(order)
 
+  const removeItem = (itemId : MenuItemInterface["id"]) => {
+    const filterRemoveItem = order.filter((orderItem) => orderItem.id !== itemId)
+    setOrder(filterRemoveItem)
+  }
+  
   return {
     order,
     setOrder,
     addItem,
+    removeItem
   }
 }
