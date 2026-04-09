@@ -3,6 +3,7 @@ import type { MenuItemInterface, OrderItemInterface } from "../types"
 
 export const useOrder = () => {
   const [order, setOrder] = useState<OrderItemInterface[]>([])
+  const [tip, setTip] = useState(0)
 
   const addItem = (item: MenuItemInterface) => {
     const existingItem = order.find((orderItem) => orderItem.id === item.id)
@@ -23,11 +24,19 @@ export const useOrder = () => {
     const filterRemoveItem = order.filter((orderItem) => orderItem.id !== itemId)
     setOrder(filterRemoveItem)
   }
+
+  const placeOrder = () => {
+    setOrder([])
+    setTip(0)
+  }
   
   return {
     order,
+    tip,
+    setTip,
     setOrder,
     addItem,
-    removeItem
+    removeItem,
+    placeOrder
   }
 }

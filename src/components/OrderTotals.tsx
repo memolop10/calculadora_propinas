@@ -4,13 +4,15 @@ import { formatCurrency } from "../helpers"
 
 type OrderTotalsProps = {
     order: OrderItemInterface[]
+    tip: number
+    placeOrder: () => void
 }
 
-const OrderTotals = ({ order }: OrderTotalsProps) => {
+const OrderTotals = ({ order, tip, placeOrder }: OrderTotalsProps) => {
 
     const subTotal = useMemo(() => order.reduce((total, item) => total + item.quantity * item.price, 0), [order])
-    const tip = useMemo(() => subTotal * 0.15, [subTotal])
-    const total = useMemo(() => subTotal + tip, [subTotal, tip])
+    const tipAmount = useMemo(() => subTotal * tip, [tip, order])
+    const totalToPay = useMemo(() => subTotal + tipAmount, [tip, order])
 
   return (
     <>
@@ -20,13 +22,20 @@ const OrderTotals = ({ order }: OrderTotalsProps) => {
                 <span className="font-bold"> {formatCurrency(subTotal)}</span>
             </p>
              <p> Propina:  
-                <span className="font-bold"> {formatCurrency(tip)}</span>
+                <span className="font-bold"> {formatCurrency(tipAmount)}</span>
             </p>
              <p> Total a Pagar:  
-                <span className="font-bold"> {formatCurrency(total)}</span>
+                <span className="font-bold"> {formatCurrency(totalToPay)}</span>
             </p>
         </div>
-        <button></button>
+        <button
+            className="w-full bg-black text-white font-bold p-3 px-4 mt-10 rounded 
+            disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={totalToPay === 0}
+            onClick={placeOrder}
+        >
+          Guardar Orden
+        </button>
     </>
   )
 }
